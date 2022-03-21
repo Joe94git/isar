@@ -160,6 +160,9 @@ ROOTFS_INSTALL_COMMAND += "rootfs_install_pkgs_download"
 rootfs_install_pkgs_download[weight] = "600"
 rootfs_install_pkgs_download[isar-apt-lock] = "release-after"
 rootfs_install_pkgs_download() {
+    ${SCRIPTSDIR}/debrepo \
+        --workdir="${TMPDIR}/debrepo/${BASE_DISTRO}-${BASE_DISTRO_CODENAME}" \
+        ${ROOTFS_PACKAGES}
     sudo -E chroot '${ROOTFSDIR}' \
         /usr/bin/apt-get ${ROOTFS_APT_ARGS} --download-only ${ROOTFS_PACKAGES}
 }
