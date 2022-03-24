@@ -89,8 +89,8 @@ class DebRepo(object):
         if not os.path.exists(self.workdir + "/etc/apt/"):
             os.makedirs(self.workdir + "/etc/apt/")
         f = open(self.workdir + "/etc/apt/sources.list", "w")
-        f.write("deb [arch=" + self.arch + "] " + self.mirror + " " + self.codename + " " + self.components + "\n")
-        f.write("deb-src [arch=" + self.arch + "] " + self.mirror + " " + self.codename + " " + self.components + "\n")
+        f.write("deb " + self.mirror + " " + self.codename + " " + self.components + "\n")
+        f.write("deb-src " + self.mirror + " " + self.codename + " " + self.components + "\n")
         f.flush
         f.close
 
@@ -125,6 +125,18 @@ class DebRepo(object):
         # Allow using repositories without keys
         if not self.check_gpg:
             apt_pkg.config.set("Acquire::AllowInsecureRepositories", "1")
+
+        apt_pkg.config["APT::Architectures::"] = "i386"
+        apt_pkg.config["APT::Architectures::"] = "armhf"
+        apt_pkg.config["APT::Architectures::"] = "arm64"
+        apt_pkg.config["APT::Architectures::"] = "amd64"
+        apt_pkg.config["APT::Architectures::"] = "mipsel"
+        apt_pkg.config["APT::Architectures::"] = "riscv64"
+        apt_pkg.config["APT::Architectures::"] = "source"
+
+        print("Native architecture:", apt_pkg.config["APT::Architecture"])
+        print("All architectures:",
+            apt_pkg.config.value_list("APT::Architectures"))
 
     def mark_essential(self):
         for pkg in self.cache.packages:
