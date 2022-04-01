@@ -305,9 +305,9 @@ do_bootstrap() {
         if [ "${BOOTSTRAP_FOR_HOST}" = "0" ]; then
             arch_param="--arch=${DISTRO_ARCH}"
         fi
-        ${DEBOOTSTRAP} $debootstrap_args \
+        ${DEBOOTSTRAP} --verbose --variant=minbase --include=${DISTRO_BOOTSTRAP_BASE_PACKAGES} \
                        $arch_param \
-                       ${@get_distro_components_argument(d)} \
+                       "${@get_distro_components_argument(d)}" \
                        "${@get_distro_suite(d)}" \
                        "${ROOTFSDIR}" \
                        "${@get_distro_source(d)}" \
@@ -340,12 +340,12 @@ do_bootstrap() {
             MY_GPGHOME="$(chroot "${ROOTFSDIR}" mktemp -d /tmp/gpghomeXXXXXXXXXX)"
             echo "Created temporary directory ${MY_GPGHOME} for gpg-agent"
             export GNUPGHOME="${MY_GPGHOME}"
-            APT_KEY_APPEND="--homedir ${MY_GPGHOME}"
+            APT_KEY_APPEND=(--homedir "${MY_GPGHOME}")
 
             kfn="$(basename $keyfile)"
             cp $keyfile "${ROOTFSDIR}/tmp/$kfn"
             chroot "${ROOTFSDIR}" /usr/bin/gpg-agent --daemon -- /usr/bin/apt-key \
-                --keyring ${THIRD_PARTY_APT_KEYRING} ${APT_KEY_APPEND} add "/tmp/$kfn"
+                --keyring ${THIRD_PARTY_APT_KEYRING} ${APT_KEY_APPEND[@]} add "/tmp/$kfn"
             rm "${ROOTFSDIR}/tmp/$kfn"
 
             echo "Removing ${MY_GPGHOME}"
