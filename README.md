@@ -1,4 +1,3 @@
-123
 
 isar - Integration System for Automated Root filesystem generation
 
