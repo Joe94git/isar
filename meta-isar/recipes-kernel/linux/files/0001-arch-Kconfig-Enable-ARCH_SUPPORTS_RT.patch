@@ -1,0 +1,28 @@
+From 83efc25075ca057fae85e2de457f3ef8b310c29e Mon Sep 17 00:00:00 2001
+From: Lau Wan Yee <wan.yee.lau@intel.com>
+Date: Fri, 3 Jun 2022 11:25:50 +0800
+Subject: [PATCH] arch/Kconfig: Enable ARCH_SUPPORTS_RT
+
+Enable ARCH_SUPPORTS_RT config.
+
+Signed-off-by: Lau Wan Yee <wan.yee.lau@intel.com>
+---
+ arch/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 632d60e13494..e79f260230f6 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -901,7 +901,7 @@ config ARCH_NO_PREEMPT
+ 	bool
+ 
+ config ARCH_SUPPORTS_RT
+-	bool
++	def_bool y
+ 
+ config CPU_NO_EFFICIENT_FFS
+ 	def_bool n
+-- 
+2.17.1
+
